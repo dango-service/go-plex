@@ -1,0 +1,25 @@
+{
+  "MediaContainer": {
+    "size": 2,
+    "Directory": [
+      {
+        "key": "1",
+        "type": "show",
+        "title": "Anime",
+        "language": "ja",
+        "agent": "tv.plex.agents.series",
+        "scanner": "Plex TV Series",
+        "uuid": "439b1a56-b072-4d43-98fe-c2a44b1f48ab"
+      },
+      {
+        "key": "2",
+        "type": "movie",
+        "title": "Movies",
+        "language": "en",
+        "agent": "tv.plex.agents.movie",
+        "scanner": "Plex Movie",
+        "uuid": "0cb61998-3563-455b-bf9e-bc43d7ab9412"
+      }
+    ]
+  }
+}

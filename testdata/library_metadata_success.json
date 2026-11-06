@@ -1,0 +1,27 @@
+{
+  "MediaContainer": {
+    "size": 1,
+    "Metadata": [
+      {
+        "ratingKey": "5001",
+        "key": "/library/metadata/5001",
+        "guid": "plex://episode/65001",
+        "type": "episode",
+        "title": "The Journey's End",
+        "index": 1,
+        "parentIndex": 1,
+        "grandparentTitle": "Sousou no Frieren",
+        "grandparentRatingKey": "1001",
+        "grandparentGuid": "plex://show/5d9c08796f6004001f302094",
+        "viewCount": 2,
+        "lastViewedAt": 1700000000,
+        "duration": 1475000,
+        "Guid": [
+          {
+            "id": "tvdb://991234"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "MediaContainer": {
+    "size": 1,
+    "Metadata": [
+      {
+        "ratingKey": "1001",
+        "key": "/library/metadata/1001/children",
+        "guid": "plex://show/5d9c08796f6004001f302094",
+        "type": "show",
+        "title": "Sousou no Frieren",
+        "year": 2023,
+        "Guid": [
+          {
+            "id": "tvdb://404080"
+          },
+          {
+            "id": "tmdb://209867"
+          }
+        ],
+        "Genre": [
+          {
+            "tag": "Animation"
+          },
+          {
+            "tag": "Adventure"
+          }
+        ],
+        "Tag": [
+          {
+            "tag": "Anime"
+          }
+        ]
+      }
+    ]
+  }
+}

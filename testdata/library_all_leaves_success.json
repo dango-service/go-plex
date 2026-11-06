@@ -1,0 +1,31 @@
+{
+  "MediaContainer": {
+    "size": 2,
+    "Metadata": [
+      {
+        "ratingKey": "5001",
+        "key": "/library/metadata/5001",
+        "guid": "plex://episode/65001",
+        "type": "episode",
+        "title": "The Journey's End",
+        "index": 1,
+        "parentIndex": 1,
+        "grandparentTitle": "Sousou no Frieren",
+        "viewCount": 1,
+        "lastViewedAt": 1700000000
+      },
+      {
+        "ratingKey": "5002",
+        "key": "/library/metadata/5002",
+        "guid": "plex://episode/65002",
+        "type": "episode",
+        "title": "It Didn't Have to Be Magic...",
+        "index": 2,
+        "parentIndex": 1,
+        "grandparentTitle": "Sousou no Frieren",
+        "viewCount": 1,
+        "lastViewedAt": 1700003600
+      }
+    ]
+  }
+}
