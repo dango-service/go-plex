@@ -24,6 +24,7 @@ const (
 type Client struct {
 	httpClient   *http.Client
 	baseURL      string
+	discoveryURL string
 	token        string
 	clientID     string
 	product      string
@@ -42,6 +43,7 @@ func NewClient(baseURL, token string, opts ...ClientOption) *Client {
 			Timeout: 15 * time.Second,
 		},
 		baseURL:      strings.TrimRight(baseURL, "/"),
+		discoveryURL: DefaultDiscoveryURL,
 		token:        strings.TrimSpace(token),
 		clientID:     DefaultClientIdentifier,
 		product:      DefaultProduct,

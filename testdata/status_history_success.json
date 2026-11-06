@@ -1,0 +1,17 @@
+{
+  "MediaContainer": {
+    "size": 1,
+    "Metadata": [
+      {
+        "historyKey": "9988",
+        "ratingKey": "5001",
+        "key": "/library/metadata/5001",
+        "title": "The Journey's End",
+        "type": "episode",
+        "viewedAt": 1700000000,
+        "accountID": 1,
+        "accountTitle": "hicham"
+      }
+    ]
+  }
+}

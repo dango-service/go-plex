@@ -1,0 +1,24 @@
+{
+  "MediaContainer": {
+    "size": 1,
+    "Metadata": [
+      {
+        "ratingKey": "5001",
+        "key": "/library/metadata/5001",
+        "guid": "plex://episode/65001",
+        "type": "episode",
+        "title": "The Journey's End",
+        "viewOffset": 300000,
+        "duration": 1475000,
+        "User": {
+          "id": "1",
+          "title": "hicham"
+        },
+        "Player": {
+          "title": "Plex Web",
+          "state": "playing"
+        }
+      }
+    ]
+  }
+}

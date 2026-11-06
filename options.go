@@ -55,3 +55,13 @@ func WithMaxBodyBytes(maxBytes int64) ClientOption {
 		}
 	}
 }
+
+// WithDiscoveryURL overrides the plex.tv resources discovery endpoint.
+func WithDiscoveryURL(rawURL string) ClientOption {
+	return func(c *Client) {
+		trimmed := strings.TrimSpace(rawURL)
+		if trimmed != "" {
+			c.discoveryURL = trimmed
+		}
+	}
+}

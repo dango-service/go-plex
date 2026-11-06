@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Tower-PMS",
+    "product": "Plex Media Server",
+    "provides": "server",
+    "clientIdentifier": "server-uuid-1234",
+    "connections": [
+      {
+        "uri": "https://192-168-1-100.local.plex.direct:32400",
+        "address": "192.168.1.100",
+        "port": 32400,
+        "local": true,
+        "relay": false
+      },
+      {
+        "uri": "https://10-0-0-1.relay.plex.direct:32400",
+        "address": "10.0.0.1",
+        "port": 32400,
+        "local": false,
+        "relay": true
+      }
+    ]
+  }
+]
