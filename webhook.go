@@ -108,7 +108,10 @@ func ParseWebhook(r *http.Request) (*WebhookPayload, error) {
 		formName := part.FormName()
 		if formName == "thumb" {
 			// Zero-allocation: discard image bytes without buffering into memory
-			_, _ = io.Copy(io.Discard, part)
+			if _, err := io.Copy(io.Discard, part); err != nil {
+				_ = part.Close()
+				return nil, fmt.Errorf("plex: read webhook thumbnail: %w", err)
+			}
 			_ = part.Close()
 			continue
 		}
@@ -126,7 +129,10 @@ func ParseWebhook(r *http.Request) (*WebhookPayload, error) {
 		}
 
 		// Discard any unrecognized parts
-		_, _ = io.Copy(io.Discard, part)
+		if _, err := io.Copy(io.Discard, part); err != nil {
+			_ = part.Close()
+			return nil, fmt.Errorf("plex: read unrecognized webhook part: %w", err)
+		}
 		_ = part.Close()
 	}
 

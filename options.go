@@ -65,3 +65,13 @@ func WithDiscoveryURL(rawURL string) ClientOption {
 		}
 	}
 }
+
+// WithPinsURL overrides the plex.tv PIN authentication endpoint (used for testing).
+func WithPinsURL(rawURL string) ClientOption {
+	return func(c *Client) {
+		trimmed := strings.TrimSpace(rawURL)
+		if trimmed != "" {
+			c.pinsURL = trimmed
+		}
+	}
+}

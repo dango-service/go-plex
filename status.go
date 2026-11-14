@@ -37,6 +37,7 @@ type HistoryItem struct {
 	ViewedAt     int64      `json:"viewedAt"`
 	AccountID    int        `json:"accountID,omitempty"`
 	AccountTitle string     `json:"accountTitle,omitempty"`
+	UserName     string     `json:"userName,omitempty"`
 }
 
 // GetSessions retrieves all active streaming playback sessions.

@@ -11,7 +11,10 @@ type Client struct {
     Library   *LibraryService
     Status    *StatusService
     Discovery *DiscoveryService
+    Auth      *AuthService
 }
+
+func (c *Client) SetToken(token string)
 
 func NewClient(baseURL, token string, opts ...ClientOption) *Client
 
@@ -20,6 +23,7 @@ type ClientOption func(*Client)
 func WithHTTPClient(httpClient *http.Client) ClientOption
 func WithClientIdentifier(clientID string) ClientOption
 func WithMaxBodyBytes(maxBytes int64) ClientOption
+func WithPinsURL(rawURL string) ClientOption
 ```
 
 ---
@@ -43,6 +47,12 @@ func (s *StatusService) GetHistory(ctx context.Context, minViewedAt int64) ([]Hi
 ### DiscoveryService
 ```go
 func (s *DiscoveryService) DiscoverServers(ctx context.Context, token string) ([]ServerDevice, error)
+```
+
+### AuthService
+```go
+func (s *AuthService) CreatePIN(ctx context.Context) (*PIN, error)
+func (s *AuthService) CheckPIN(ctx context.Context, pinID int64) (*PIN, error)
 ```
 
 ### Webhook Parser

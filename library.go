@@ -38,7 +38,7 @@ func (s *LibraryService) GetSectionItems(ctx context.Context, sectionKey string)
 		return nil, nil, fmt.Errorf("plex: section key cannot be empty")
 	}
 
-	path := fmt.Sprintf("/library/sections/%s/all", trimmed)
+	path := fmt.Sprintf("/library/sections/%s/all?includeGuids=1", trimmed)
 	var mc MediaContainer[MetadataItem]
 	resp, err := s.client.doRequest(ctx, http.MethodGet, path, nil, &mc)
 	if err != nil {
@@ -55,7 +55,7 @@ func (s *LibraryService) GetMetadata(ctx context.Context, ratingKey string) (*Me
 		return nil, nil, fmt.Errorf("plex: rating key cannot be empty")
 	}
 
-	path := fmt.Sprintf("/library/metadata/%s", trimmed)
+	path := fmt.Sprintf("/library/metadata/%s?includeGuids=1", trimmed)
 	var mc MediaContainer[MetadataItem]
 	resp, err := s.client.doRequest(ctx, http.MethodGet, path, nil, &mc)
 	if err != nil {
@@ -77,7 +77,7 @@ func (s *LibraryService) GetAllLeaves(ctx context.Context, ratingKey string) ([]
 		return nil, nil, fmt.Errorf("plex: rating key cannot be empty")
 	}
 
-	path := fmt.Sprintf("/library/metadata/%s/allLeaves", trimmed)
+	path := fmt.Sprintf("/library/metadata/%s/allLeaves?includeGuids=1", trimmed)
 	var mc MediaContainer[MetadataItem]
 	resp, err := s.client.doRequest(ctx, http.MethodGet, path, nil, &mc)
 	if err != nil {

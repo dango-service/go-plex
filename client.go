@@ -25,6 +25,7 @@ type Client struct {
 	httpClient   *http.Client
 	baseURL      string
 	discoveryURL string
+	pinsURL      string
 	token        string
 	clientID     string
 	product      string
@@ -34,6 +35,7 @@ type Client struct {
 	Library   *LibraryService
 	Status    *StatusService
 	Discovery *DiscoveryService
+	Auth      *AuthService
 }
 
 // NewClient creates a new Plex Media Server client.
@@ -44,6 +46,7 @@ func NewClient(baseURL, token string, opts ...ClientOption) *Client {
 		},
 		baseURL:      strings.TrimRight(baseURL, "/"),
 		discoveryURL: DefaultDiscoveryURL,
+		pinsURL:      DefaultPinsURL,
 		token:        strings.TrimSpace(token),
 		clientID:     DefaultClientIdentifier,
 		product:      DefaultProduct,
@@ -60,8 +63,14 @@ func NewClient(baseURL, token string, opts ...ClientOption) *Client {
 	c.Library = &LibraryService{client: c}
 	c.Status = &StatusService{client: c}
 	c.Discovery = &DiscoveryService{client: c}
+	c.Auth = &AuthService{client: c}
 
 	return c
+}
+
+// SetToken updates the client's Plex authentication token.
+func (c *Client) SetToken(token string) {
+	c.token = strings.TrimSpace(token)
 }
 
 // LibraryService handles library sections, metadata, and episode leaves.

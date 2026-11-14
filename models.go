@@ -43,7 +43,16 @@ type Guid struct {
 func (g Guid) Scheme() string {
 	parts := strings.SplitN(g.ID, "://", 2)
 	if len(parts) == 2 {
-		return parts[0]
+		scheme := strings.ToLower(strings.TrimSpace(parts[0]))
+		scheme = strings.TrimPrefix(scheme, "com.plexapp.agents.")
+		switch scheme {
+		case "thetvdb":
+			return "tvdb"
+		case "themoviedb":
+			return "tmdb"
+		default:
+			return scheme
+		}
 	}
 	return ""
 }
@@ -52,7 +61,11 @@ func (g Guid) Scheme() string {
 func (g Guid) Value() string {
 	parts := strings.SplitN(g.ID, "://", 2)
 	if len(parts) == 2 {
-		return parts[1]
+		value := parts[1]
+		if end := strings.IndexAny(value, "?#"); end >= 0 {
+			value = value[:end]
+		}
+		return strings.TrimSpace(value)
 	}
 	return g.ID
 }
@@ -85,6 +98,7 @@ type MetadataItem struct {
 	GrandparentTitle         string     `json:"grandparentTitle,omitempty"`
 	GrandparentOriginalTitle string     `json:"grandparentOriginalTitle,omitempty"`
 	GrandparentRatingKey     FlexibleID `json:"grandparentRatingKey,omitempty"`
+	ParentGuid               string     `json:"parentGuid,omitempty"`
 	GrandparentGuid          string     `json:"grandparentGuid,omitempty"`
 	GrandparentThumb         string     `json:"grandparentThumb,omitempty"`
 	LibrarySectionID         FlexibleID `json:"librarySectionID,omitempty"`
@@ -95,44 +109,38 @@ type MetadataItem struct {
 	Collection               []TagItem  `json:"Collection,omitempty"`
 }
 
-// TVDB returns the TVDB ID if present in Guids.
-func (m *MetadataItem) TVDB() string {
-	for _, g := range m.Guids {
-		if g.Scheme() == "tvdb" {
+func (m *MetadataItem) externalID(scheme string) string {
+	if m == nil {
+		return ""
+	}
+	guids := append([]Guid(nil), m.Guids...)
+	guids = append(guids, Guid{ID: m.Guid}, Guid{ID: m.ParentGuid}, Guid{ID: m.GrandparentGuid})
+	for _, g := range guids {
+		if g.Scheme() == scheme {
 			return g.Value()
 		}
 	}
 	return ""
+}
+
+// TVDB returns the TVDB ID from an item's GUIDs or its ancestor GUID fields.
+func (m *MetadataItem) TVDB() string {
+	return m.externalID("tvdb")
 }
 
 // TMDB returns the TMDB ID if present in Guids.
 func (m *MetadataItem) TMDB() string {
-	for _, g := range m.Guids {
-		if g.Scheme() == "tmdb" {
-			return g.Value()
-		}
-	}
-	return ""
+	return m.externalID("tmdb")
 }
 
 // IMDb returns the IMDb ID if present in Guids.
 func (m *MetadataItem) IMDb() string {
-	for _, g := range m.Guids {
-		if g.Scheme() == "imdb" {
-			return g.Value()
-		}
-	}
-	return ""
+	return m.externalID("imdb")
 }
 
 // AniDB returns the AniDB ID if present in Guids.
 func (m *MetadataItem) AniDB() string {
-	for _, g := range m.Guids {
-		if g.Scheme() == "anidb" {
-			return g.Value()
-		}
-	}
-	return ""
+	return m.externalID("anidb")
 }
 
 // GenreNames extracts string genre names.
