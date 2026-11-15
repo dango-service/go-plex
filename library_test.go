@@ -6,6 +6,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestLibraryService_GetSections(t *testing.T) {
@@ -78,6 +79,28 @@ func TestLibraryService_GetSectionItems_Validation(t *testing.T) {
 	client := NewClient("http://localhost:32400", "test-token")
 	if _, _, err := client.Library.GetSectionItems(context.Background(), "   "); err == nil {
 		t.Fatal("expected error on empty section key, got nil")
+	}
+}
+
+func TestLibraryService_GetRecentlyWatchedItems(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/library/sections/1/all" || r.URL.Query().Get("type") != "4" ||
+			r.URL.Query().Get("lastViewedAt>>") != "2026-11-15" || r.URL.Query().Get("includeGuids") != "1" {
+			t.Errorf("unexpected recent episode query: %s", r.URL.String())
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"MediaContainer":{"Metadata":[{"ratingKey":"5","type":"episode","viewCount":1,"lastViewedAt":1794758400}]}}`))
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL, "test-token")
+	since := time.Date(2026, 11, 15, 12, 0, 0, 0, time.UTC)
+	items, _, err := client.Library.GetRecentlyWatchedItems(context.Background(), "1", "show", since)
+	if err != nil || len(items) != 1 || items[0].RatingKey.String() != "5" {
+		t.Fatalf("unexpected recently watched episodes: items=%+v err=%v", items, err)
+	}
+	if _, _, err := client.Library.GetRecentlyWatchedItems(context.Background(), "1", "artist", since); err == nil {
+		t.Fatal("unsupported section type should fail")
 	}
 }
 

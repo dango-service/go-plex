@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
+	"time"
 )
 
 // Section represents a Plex library section (e.g. Anime, TV Shows, Movies).
@@ -45,6 +47,33 @@ func (s *LibraryService) GetSectionItems(ctx context.Context, sectionKey string)
 		return nil, resp, fmt.Errorf("plex: get section items: %w", err)
 	}
 
+	return mc.Items(), resp, nil
+}
+
+// GetRecentlyWatchedItems returns items whose Plex watch state changed since
+// the given time. Plex's lastViewedAt filter is date-granular, so callers must
+// also compare each item's LastViewedAt with their exact checkpoint.
+func (s *LibraryService) GetRecentlyWatchedItems(ctx context.Context, sectionKey, sectionType string, since time.Time) ([]MetadataItem, *Response, error) {
+	sectionKey = strings.TrimSpace(sectionKey)
+	if sectionKey == "" {
+		return nil, nil, fmt.Errorf("plex: section key cannot be empty")
+	}
+	itemType := "4" // episode
+	if sectionType == "movie" {
+		itemType = "1"
+	} else if sectionType != "show" {
+		return nil, nil, fmt.Errorf("plex: section type must be show or movie")
+	}
+	query := url.Values{}
+	query.Set("type", itemType)
+	query.Set("lastViewedAt>>", since.UTC().Format("2006-01-02"))
+	query.Set("includeGuids", "1")
+	path := fmt.Sprintf("/library/sections/%s/all?%s", url.PathEscape(sectionKey), query.Encode())
+	var mc MediaContainer[MetadataItem]
+	resp, err := s.client.doRequest(ctx, http.MethodGet, path, nil, &mc)
+	if err != nil {
+		return nil, resp, fmt.Errorf("plex: get recently watched items: %w", err)
+	}
 	return mc.Items(), resp, nil
 }
 
